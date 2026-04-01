@@ -2,12 +2,12 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY api/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY api/ ./api/
 COPY frontend/ ./frontend/
 
-EXPOSE 5000
+EXPOSE 8000
 
-CMD ["python", "api/app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "api.app:app"]
