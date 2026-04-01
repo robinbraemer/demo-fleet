@@ -1,11 +1,20 @@
 """Fleet Management API — Python/Flask backend."""
 
+import os
 import uuid
-from flask import Flask, jsonify, request
+
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
-app = Flask(__name__)
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend")
+
+app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 CORS(app)
+
+
+@app.route("/")
+def index():
+    return send_from_directory(FRONTEND_DIR, "index.html")
 
 # In-memory vehicle store seeded with demo data
 vehicles = {
@@ -140,4 +149,4 @@ def stats():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(host="0.0.0.0", debug=True, port=5000)
